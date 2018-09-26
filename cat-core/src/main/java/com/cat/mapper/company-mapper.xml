@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace = "LeaseCompanyMapper">
+    <resultMap type="com.cat.model.LeaseCompanyDO" id="companyMap">
+        <result column="id" property="id"/>
+        <result column="lease_company_code" property="leaseCompanyCode"/>
+        <result column="lease_company" property="leaseCompanyName"/>
+        <result column="rate" property="rate"/>
+    </resultMap>
+
+    <select id="findLeaseCompanyProperty" parameterType="String" resultMap="companyMap">
+        select * from fcl_lease_company_basic where lease_company_code = #{leaseCompanyCode}
+    </select>
+    
+    <update id="updateByCode" parameterType="com.cat.model.LeaseCompanyDO">
+        UPDATE fcl_lease_company_basic SET rate = #{rate} WHERE lease_company_code = #{leaseCompanyCode}
+    </update>
+</mapper>
