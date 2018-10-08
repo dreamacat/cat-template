@@ -1,8 +1,12 @@
-package com.cat.utils;
+package com.cat.listener;
 
 import com.cat.constant.enums.EventTypeEnum;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.core.Ordered;
+
+import java.io.Serializable;
 
 /**
  * @author wangxiaoqiang
@@ -10,12 +14,26 @@ import lombok.extern.slf4j.Slf4j;
  **/
 @Data
 @Slf4j
-public class EventEntity<T> {
+public class AbstractEvent<T> implements Serializable, Ordered {
     private T data = null;
     private EventTypeEnum typeEnum;
     private String traceId;
+    private final long timestamp = System.currentTimeMillis();
 
-    public EventEntity(T data, EventTypeEnum typeEnum) {
+    /**
+     * 事务提交后 注册事件执行的顺序，越小越靠前，默认是 Integer.MAX_VALUE
+     */
+    @Override
+    public int getOrder() {
+        return 1000;
+    }
+
+    /**
+     *
+     * @param data
+     * @param typeEnum 事件类型，not null
+     */
+    public AbstractEvent(T data, EventTypeEnum typeEnum) {
         this.data = data;
         this.typeEnum = typeEnum;
         this.setupTraceId();

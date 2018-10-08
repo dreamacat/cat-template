@@ -29,7 +29,7 @@ import java.util.Properties;
 @AutoConfigureAfter({ DataSourceConfig.class })
 @PropertySource("classpath:properties/mybatis.properties")
 @MapperScan(basePackages = { "com.cat.mapper"})
-@EnableTransactionManagement
+@EnableTransactionManagement // 启注解事务管理，等同于xml配置方式的 <tx:annotation-driven />
 @Slf4j
 public class MybatisConfig implements TransactionManagementConfigurer {
 

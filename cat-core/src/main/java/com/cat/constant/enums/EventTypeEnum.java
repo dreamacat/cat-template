@@ -11,9 +11,8 @@ import lombok.Getter;
 @Getter
 public enum EventTypeEnum {
 
-    LEASE_COMPANY_ADD(1, "添加"),
-    LEASE_COMPANY_UPDATE(2, "更新");
+    LEASE_COMPANY_ADD("添加"),
+    LEASE_COMPANY_UPDATE("更新");
 
-    private Integer type;
-    private String describe;
+    private String desc;
 }

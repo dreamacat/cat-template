@@ -1,10 +1,6 @@
 package com.cat.listener;
 
-import com.cat.constant.enums.EventTypeEnum;
-import com.cat.model.EntityVO;
 import com.cat.model.LeaseCompanyDO;
-import com.cat.utils.EventEntity;
-import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -34,4 +30,7 @@ public class TestListener {
     public void afterRollback(LeaseCompanyDO event) {
         System.out.println(" after rollback 当前线程："+Thread.currentThread().getName());
     }
+
+
+
 }
