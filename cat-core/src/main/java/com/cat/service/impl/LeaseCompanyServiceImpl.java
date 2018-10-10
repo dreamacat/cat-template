@@ -1,12 +1,12 @@
 package com.cat.service.impl;
 
+import com.cat.annotations.AopTestAnno;
 import com.cat.constant.enums.EventTypeEnum;
 import com.cat.dao.user.LeaseCompanyDao;
 import com.cat.listener.AsyncEventEntity;
 import com.cat.listener.SyncEventEntity;
 import com.cat.model.LeaseCompanyDO;
 import com.cat.service.LeaseCompanyService;
-import com.cat.listener.AbstractEvent;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,7 @@ public class LeaseCompanyServiceImpl implements LeaseCompanyService {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
+    @AopTestAnno(value = "testAuth", desc = "测试一下")
     public LeaseCompanyDO getLeaseCompanyByCode(String code) {
         Map<String, String> param = Maps.newHashMap();
         param.put("leaseCompanyCode", code);
