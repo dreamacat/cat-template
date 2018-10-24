@@ -2,6 +2,7 @@ package com.cat.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -13,6 +14,10 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @Slf4j
 public class AsyncConfig implements AsyncConfigurer {
+
+    @Autowired
+    private AsyncRejectHandler asyncRejectHandler;
+
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
@@ -23,6 +28,7 @@ public class AsyncConfig implements AsyncConfigurer {
         threadPool.setWaitForTasksToCompleteOnShutdown(true);
         threadPool.setAwaitTerminationSeconds(30);
         threadPool.setThreadNamePrefix("AsyncThread-");
+//        threadPool.setRejectedExecutionHandler(asyncRejectHandler);
         threadPool.initialize(); //初始化线程池
         log.info("--------------------------> > >线程池初始化完成{}");
         return threadPool;

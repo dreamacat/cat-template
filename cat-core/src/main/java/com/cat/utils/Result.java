@@ -1,5 +1,7 @@
 package com.cat.utils;
 
+import org.springframework.util.StringUtils;
+
 /**
  * @author wangxiaoqiang
  * @since 2018/09/19

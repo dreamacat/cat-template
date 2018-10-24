@@ -1,7 +1,10 @@
 package com.cat.listener;
 
+import com.cat.dao.user.LeaseCompanyDao;
 import com.cat.model.LeaseCompanyDO;
+import com.cat.service.LeaseCompanyService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -21,6 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class EventDispatcher {
 
     private static ConcurrentHashMap<String, List<EventHandler>> handlersMap = new ConcurrentHashMap<>();
+
+    @Autowired
+    private LeaseCompanyService leaseCompanyService;
 
     /**
      * 异步，无论是否有事务，都执行
@@ -57,6 +63,7 @@ public class EventDispatcher {
     }
 
     private void doHandler(AbstractEvent event) {
+        leaseCompanyService.getLeaseCompanyByCode("000000");
         List<EventHandler> handlers = handlersMap.get(event.getTypeEnum().name());
         if (CollectionUtils.isEmpty(handlers)) {
             log.warn("无可执行的handler，typeName = " + event.getTypeEnum().name());

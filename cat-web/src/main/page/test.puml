@@ -1,0 +1,42 @@
+@startuml
+Tomcat -> StandardServer: 1.start
+StandardServer -> StandardServer: 2.start
+StandardServer -> StandardServer: 3.init
+StandardServer -> StandardService: 4.init
+StandardService -> StandardEngine: 5.init
+StandardEngine -> connector: 6.init
+StandardEngine <-- connector
+StandardService <-- StandardEngine
+StandardServer <-- StandardService
+
+StandardServer -> StandardService: 7.start
+StandardService -> StandardEngine: 8.start
+StandardEngine -> StandardHost: 9.start
+StandardHost -> StandardHost: 10.init
+StandardHost -> StandardContext: 11.start
+StandardContext -> StandardContext: 12.init
+StandardContext -> StandardConfig: 13.init
+StandardContext <-- StandardConfig:
+StandardContext -> StandardContext: 14.startInternal
+StandardHost <-- StandardContext
+StandardEngine <-- StandardHost
+StandardEngine->StandardEngine: 15.ContainerBackgroundProcessor.start
+StandardService<--StandardEngine
+
+StandardService->connector:16.start
+connector->Http11Protocol:17.init
+Http11Protocol->Http11Protocol:18.start
+Http11Protocol->MapperListener:19.init
+Http11Protocol<--MapperListener
+connector<--Http11Protocol
+StandardService<--connector
+StandardServer<--StandardService
+Tomcat<--StandardServer
+
+
+
+
+
+
+
+@enduml

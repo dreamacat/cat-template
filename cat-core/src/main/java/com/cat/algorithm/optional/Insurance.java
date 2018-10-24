@@ -9,4 +9,14 @@ import lombok.Data;
 @Data
 public class Insurance {
     private String name;
+    private Integer type;
+
+    public Insurance() {
+
+    }
+
+    public Insurance(String name, Integer type) {
+        this.name = name;
+        this.type = type;
+    }
 }

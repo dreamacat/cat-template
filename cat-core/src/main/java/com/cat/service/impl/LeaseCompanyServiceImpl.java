@@ -31,7 +31,7 @@ public class LeaseCompanyServiceImpl implements LeaseCompanyService {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
-    @AopTestAnno(value = "testAuth", desc = "测试一下")
+//    @AopTestAnno(value = "testAuth", desc = "测试一下")
     public LeaseCompanyDO getLeaseCompanyByCode(String code) {
         Map<String, String> param = Maps.newHashMap();
         param.put("leaseCompanyCode", code);
@@ -43,10 +43,7 @@ public class LeaseCompanyServiceImpl implements LeaseCompanyService {
     @Transactional
     public boolean updateByCode(LeaseCompanyDO companyDO) {
         int res = leaseCompanyDao.updateByCode(companyDO);
-//        System.out.println("当前线程："+Thread.currentThread().getName());
         applicationEventPublisher.publishEvent(new AsyncEventEntity(companyDO,EventTypeEnum.LEASE_COMPANY_ADD));
-
-        applicationEventPublisher.publishEvent(new SyncEventEntity(companyDO,EventTypeEnum.LEASE_COMPANY_UPDATE));
 
         System.out.println("事件发送成功");
         return res == 0;
