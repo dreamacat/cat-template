@@ -1,0 +1,10 @@
+@startuml
+actor -> Proxy: 1.调用Proxy的newProxyInstance方法
+Proxy -> Proxy: 2.调用自己的getProxyClass方法
+Proxy -> Proxy: 3.构造代理类名
+Proxy -> ProxyGenerator: 4.调用其generateProxyClass方法
+Proxy <-- ProxyGenerator
+Proxy -> Proxy: 5.调用本地方法defineClass0构造代理类
+Proxy -> Proxy: 6.根据代理类创建代理对象
+actor <-- Proxy:
+@enduml

@@ -1,4 +1,4 @@
-package com.cat.aspect;
+package com.cat.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;

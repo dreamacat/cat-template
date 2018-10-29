@@ -1,8 +1,6 @@
 package com.cat.component;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -16,6 +14,7 @@ import java.io.IOException;
 
 /**
  * @author wangxiaoqiang
+ * Filte是Servlet规范规定的，只能用于web程序中，是servlet容器支持的，作用范围是servlet前后；
  * @since 2018/10/23
  **/
 @Order(1)

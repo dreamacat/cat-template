@@ -1,0 +1,23 @@
+@startuml
+actor -> JDKDynamicAopProxy: 1.调用invoke方法
+JDKDynamicAopProxy -> JDKDynamicAopProxy: 2.获取目标方法上的拦截器
+note left #white: 如调用目标\n方法simpleMethod\n1将会代理到\nJdkDynamicAopProxy\n执行其invoke方法
+JDKDynamicAopProxy -> ReflectiveMethodInvocation: 3.创建目标方法上拦截链的执行器
+ReflectiveMethodInvocation -> Interceptor1: 4.获取一个拦截器并执行invoke方法
+ReflectiveMethodInvocation -> Interceptor1: 5.执行前置方法
+ReflectiveMethodInvocation <- Interceptor1: 6.下一个拦截链
+ReflectiveMethodInvocation --> Interceptor1
+Interceptor1->Interceptor2:7.获取下一个拦截器并执行invoke方法
+Interceptor2->Interceptor2:8.执行前置方法
+ReflectiveMethodInvocation<-Interceptor2:9.拦截结束
+ReflectiveMethodInvocation-->Interceptor2
+Interceptor2->目标对象:10.调用目标方法
+Interceptor2<--目标对象:10.调用目标方法
+Interceptor2->Interceptor2:11.执行后置方法
+Interceptor1<--Interceptor2:
+Interceptor1<-Interceptor1:12.执行后置方法
+ReflectiveMethodInvocation<--Interceptor1:
+JDKDynamicAopProxy<--ReflectiveMethodInvocation:
+actor<--JDKDynamicAopProxy:
+
+@enduml

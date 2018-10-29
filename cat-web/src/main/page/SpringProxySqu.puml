@@ -1,0 +1,9 @@
+@startuml
+FactoryBeanRegistrySupport -> ProxyFactoryBean: 1.调用getObject方法
+ProxyFactoryBean -> ProxyFactoryBean: 2.调用自己的initializeAcvisorChain
+ProxyFactoryBean -> ProxyFactoryBean: 3.将interceptor对象包装成Advisor对象（将构建拦截器链放在缓存对象中）
+ProxyFactoryBean -> ProxyFactoryBean: 4.调用getSingletonInstance方法
+ProxyFactoryBean -> JDKDynamicAopProxy: 5.调用getProxy方法产生代理对象
+ProxyFactoryBean <-- JDKDynamicAopProxy
+FactoryBeanRegistrySupport <-- ProxyFactoryBean: 返回代理对象
+@enduml

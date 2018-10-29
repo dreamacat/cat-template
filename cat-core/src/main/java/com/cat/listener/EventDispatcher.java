@@ -1,17 +1,15 @@
 package com.cat.listener;
 
-import com.cat.dao.user.LeaseCompanyDao;
 import com.cat.model.LeaseCompanyDO;
 import com.cat.service.LeaseCompanyService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,12 +19,13 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @Slf4j
 @Component
-public class EventDispatcher {
+public class EventDispatcher  {
 
     private static ConcurrentHashMap<String, List<EventHandler>> handlersMap = new ConcurrentHashMap<>();
 
-    @Autowired
+    @Resource
     private LeaseCompanyService leaseCompanyService;
+
 
     /**
      * 异步，无论是否有事务，都执行
