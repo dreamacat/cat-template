@@ -7,6 +7,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
@@ -33,13 +34,21 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
         if (hasLogin(request) && (authZ == null || authZ.role().equals("cat"))) {
             return true;
         }
+        response.setStatus(401);
+        outRequestForJson(request,response, authZ.errMsg());
 
-        response.setStatus(403);
         return false;
     }
 
     private boolean hasLogin(HttpServletRequest request) {
         return true;
+    }
+
+    private static void outRequestForJson(HttpServletRequest request,
+                                         HttpServletResponse response, String res) throws IOException {
+        //防止乱码
+        response.setContentType("application/json; charset=UTF-8");
+        response.getWriter().print(res);
     }
 
 }

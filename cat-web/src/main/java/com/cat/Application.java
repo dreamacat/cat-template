@@ -3,18 +3,13 @@ package com.cat;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOError;
-import java.io.IOException;
 
 @SpringBootApplication
 @EnableScheduling
 @ServletComponentScan
+@EnableAspectJAutoProxy(exposeProxy = true) // 使用cglib方式实现代理
 public class Application {
 
 

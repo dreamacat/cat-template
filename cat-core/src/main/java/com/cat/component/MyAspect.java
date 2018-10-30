@@ -29,8 +29,14 @@ public class MyAspect {
 
     @Around("@annotation(com.cat.annotations.AopTestAnno)")
     public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+//        AopTestAnno aopTestAnno = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(AopTestAnno.class);
+//        Method method = ClassUtils.getMostSpecificMethod(((MethodSignature) joinPoint.getSignature()).getMethod(), joinPoint.getTarget().getClass());
+//        AuthZ anno = AnnotationUtils.findAnnotation(method, AuthZ.class);
+//        System.out.println("anno :" + anno.value());
+
         System.out.println("start around");
         Object obj= (Object) joinPoint.proceed();
+
         System.out.println("end around");
 
         return obj;

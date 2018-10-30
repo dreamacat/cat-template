@@ -24,7 +24,7 @@ public class EventDispatcher  {
     private static ConcurrentHashMap<String, List<EventHandler>> handlersMap = new ConcurrentHashMap<>();
 
     @Resource
-    private LeaseCompanyService leaseCompanyService;
+    private LeaseCompanyService leaseCompanyServiceImpl;
 
 
     /**
@@ -62,7 +62,7 @@ public class EventDispatcher  {
     }
 
     private void doHandler(AbstractEvent event) {
-        leaseCompanyService.getLeaseCompanyByCode("000000");
+        leaseCompanyServiceImpl.getLeaseCompanyByCode("000000");
         List<EventHandler> handlers = handlersMap.get(event.getTypeEnum().name());
         if (CollectionUtils.isEmpty(handlers)) {
             log.warn("无可执行的handler，typeName = " + event.getTypeEnum().name());

@@ -1,7 +1,6 @@
 package com.cat.json;
 
 import com.alibaba.fastjson.JSON;
-import com.cat.annotations.AuthZ;
 import com.cat.annotations.View;
 import com.cat.model.LeaseCompanyDO;
 import com.cat.service.CatDemoService;
@@ -31,7 +30,7 @@ public class CatDemoApi {
     @Autowired
     private CatDemoService catDemoService;
     @Resource
-    private LeaseCompanyService leaseCompanyService;
+    private LeaseCompanyService leaseCompanyServiceImpl;
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
@@ -54,13 +53,13 @@ public class CatDemoApi {
 
     @RequestMapping(value={"/getLeaseCompany"}, method= {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value="根据code查询 ", notes="返回hello + name")
-    @AuthZ
+//    @AuthZ
     public Result<LeaseCompanyDO> getLeaseCompany(@ApiParam(name="code", value="code") @RequestParam(name = "code", required = true) String code) {
-        LeaseCompanyDO companyDO = leaseCompanyService.getLeaseCompanyByCode(code);
+        LeaseCompanyDO companyDO = leaseCompanyServiceImpl.getLeaseCompanyByCode(code);
         if (companyDO != null) {
             companyDO.setRate(1010);
         }
-        System.out.println(leaseCompanyService.updateByCode(companyDO));
+        System.out.println(leaseCompanyServiceImpl.updateByCode(companyDO));
         return Result.success(companyDO);
     }
 
