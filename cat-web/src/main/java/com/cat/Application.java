@@ -6,9 +6,9 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
 @EnableScheduling
 @ServletComponentScan
+@SpringBootApplication(exclude = org.activiti.spring.boot.SecurityAutoConfiguration.class)
 @EnableAspectJAutoProxy(exposeProxy = true) // 使用cglib方式实现代理
 public class Application {
 

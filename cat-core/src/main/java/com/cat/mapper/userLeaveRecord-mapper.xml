@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace = "UserLeaveRecordMapper">
+    <resultMap type="com.cat.model.UserLeaveRecordDO" id="recordMap">
+        <result column="id" property="id"/>
+        <result column="task_id" property="taskId"/>
+        <result column="instance_id" property="instanceId"/>
+        <result column="user_id" property="userId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="status_code" property="statusCode"/>
+        <result column="next_status_code" property="nextStatus"/>
+        <result column="content" property="content"/>
+        <result column="result" property="result"/>
+        <result column="sign_result" property="signResult"/>
+    </resultMap>
+
+    <select id="findRecordByTaskId" parameterType="com.cat.model.UserLeaveRecordDO" resultMap="recordMap">
+        select * from leave_apply_record where task_id = #{taskId} and user_id = #{userId} order BY create_time DESC
+    </select>
+
+    <select id="findRecordByUserId" parameterType="com.cat.model.UserLeaveRecordDO" resultMap="recordMap">
+        select * from leave_apply_record where
+        user_id = #{userId} order BY create_time DESC
+    </select>
+
+    <select id="findById" parameterType="java.lang.Long" resultMap="recordMap">
+        select * from leave_apply_record where id = #{id}
+    </select>
+    
+    <update id="updateById" parameterType="com.cat.model.UserLeaveRecordDO">
+        UPDATE leave_apply_record SET status_code = #{statusCode},task_id = #{taskId}, result = #{result} WHERE id = #{id}
+    </update>
+
+    <insert id="insertRecord" parameterType="com.cat.model.UserLeaveRecordDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO leave_apply_record (task_id, instance_id, user_id, status_code, create_time, result)
+        VALUES (#{taskId}, #{instanceId}, #{userId}, #{statusCode}, #{createTime}, #{result});
+    </insert>
+
+    <insert id="insertRecordTrace" parameterType="com.cat.model.UserLeaveRecordDO">
+        INSERT INTO leave_apply_trace (apply_id, content, status_code, next_status_code, create_time, sign_result)
+        VALUES (#{id}, #{content}, #{statusCode}, #{nextStatus}, #{createTime}, #{signResult});
+    </insert>
+
+
+
+</mapper>

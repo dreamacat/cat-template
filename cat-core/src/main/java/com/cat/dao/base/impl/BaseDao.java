@@ -104,22 +104,21 @@ public class BaseDao implements IDao, InitializingBean {
         
     }
     @Override
-    public int insertBySqlId(String sqlID, Object param) throws Exception {
-
+    public int insertBySqlId(String sqlID, Object param){
         checkSqlId(sqlID);
-        return sqlSessionTemplate.insert(sqlID, param);
+        int t = sqlSessionTemplate.insert(sqlID, param);
+        System.out.println("insert :" + t);
+        return t;
+
     }
     @Override
-    public int updateBySqlId(String sqlID, Object param) throws Exception {
-
+    public int updateBySqlId(String sqlID, Object param) {
         checkSqlId(sqlID);
-
         int res = sqlSessionTemplate.update(sqlID, param);
-       
         return res;
     }
     @Override
-    public int deleteBySqlId(String sqlID, Object param) throws Exception {
+    public int deleteBySqlId(String sqlID, Object param) {
 
         checkSqlId(sqlID);
         int res = sqlSessionTemplate.delete(sqlID, param);
@@ -127,31 +126,24 @@ public class BaseDao implements IDao, InitializingBean {
         return res;
     }
     @Override
-    public int executeBySql(String sql, Object... params) throws Exception {
-
-        if (sql == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
-        }
+    public int executeBySql(String sql, Object... params)  {
         return jdbcTemplate.update(sql, params);
-
     }
     @Override
-    public <T> T findBySqlId(String sqlID, Object param, Class<T> resultType) throws Exception {
+    public <T> T findBySqlId(String sqlID, Object param, Class<T> resultType){
 
         checkSqlId(sqlID);
         return sqlSessionTemplate.selectOne(sqlID, param);
 
     }
 
-    private void checkSqlId(String sqlID) throws Exception {
-        if (sqlID == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLA);
-        }
+    private boolean checkSqlId(String sqlID) {
+        return  (sqlID != null);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> List<T> findListBySqlId(String sqlID, Object param, Class<T> resultType) throws Exception {
+    public <T> List<T> findListBySqlId(String sqlID, Object param, Class<T> resultType) {
 
         checkSqlId(sqlID);
         List<Object> list = sqlSessionTemplate.selectList(sqlID, param);
@@ -160,7 +152,7 @@ public class BaseDao implements IDao, InitializingBean {
     }
     @Override
     @SuppressWarnings("unchecked")
-    public <T> List<T> findListBySqlId(String sqlID, Object param, int pageNo, int pageSize, Class<T> resultType) throws Exception {
+    public <T> List<T> findListBySqlId(String sqlID, Object param, int pageNo, int pageSize, Class<T> resultType) {
 
         checkSqlId(sqlID);
         int offset = (pageNo - 1) * pageSize;
@@ -173,7 +165,7 @@ public class BaseDao implements IDao, InitializingBean {
     @SuppressWarnings("rawtypes")
     @Override
     public Map<String, Object> findRecordsWithTotalBySqlId(String sqlID,
-            Object param, int pageNo, int pageSize) throws Exception {
+            Object param, int pageNo, int pageSize) {
 
         checkSqlId(sqlID);
 
@@ -212,12 +204,7 @@ public class BaseDao implements IDao, InitializingBean {
         return resMap;
     }
     @Override
-    public Map<String, Object> findBySql(String sql, Object... params) throws Exception {
-
-        if (sql == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
-        }
-
+    public Map<String, Object> findBySql(String sql, Object... params) {
         List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, params);
         Map<String, Object> map = null;
         if (list.size() > 0) {
@@ -226,20 +213,20 @@ public class BaseDao implements IDao, InitializingBean {
         return map;
     }
     @Override
-    public List<Map<String, Object>> findListBySql(String sql, Object... params) throws Exception {
+    public List<Map<String, Object>> findListBySql(String sql, Object... params) {
 
-        if (sql == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
-        }
+//        if (sql == null) {
+//            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
+//        }
         return jdbcTemplate.queryForList(sql, params);
     }
     @Override
     public List<Map<String, Object>> findListBySql(String sql, int pageNo,
-            int pageSize, Object... params) throws Exception {
+            int pageSize, Object... params)  {
 
-        if (sql == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
-        }
+//        if (sql == null) {
+//            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
+//        }
         int offset = (pageNo - 1) * pageSize;
         String newSql = dialect.getLimitString(sql, offset, pageSize);
         Object[] newParams = setParameters(params, pageNo, pageSize);
@@ -248,11 +235,11 @@ public class BaseDao implements IDao, InitializingBean {
     }
     @Override
     public Map<String, Object> findRecordsWithTotalBySql(String sql,
-            int pageNo, int pageSize, Object... params) throws Exception {
+            int pageNo, int pageSize, Object... params) {
 
-        if (sql == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
-        }
+//        if (sql == null) {
+//            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
+//        }
         String countSql = dialect.getCountString(sql);
         Map<String, Object> map = jdbcTemplate.queryForMap(countSql, params);
         Object num = map.get("n$$");
@@ -292,25 +279,25 @@ public class BaseDao implements IDao, InitializingBean {
         return newParams;
     }
     @Override
-    public <T> T findByProc(String sql, CallableStatementCallback<T> callback) throws Exception {
-        if (sql == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
-        }
-
-        if (callback == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLC);
-        }
+    public <T> T findByProc(String sql, CallableStatementCallback<T> callback) {
+//        if (sql == null) {
+//            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
+//        }
+//
+//        if (callback == null) {
+//            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLC);
+//        }
         return jdbcTemplate.execute(sql, callback);
 
     }
     @Override
-    public <T> T executeByProc(String sql, CallableStatementCallback<T> callback) throws Exception {
-    	if (sql == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
-        }
-        if (callback == null) {
-            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLC);
-        }
+    public <T> T executeByProc(String sql, CallableStatementCallback<T> callback)  {
+//    	if (sql == null) {
+//            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLB);
+//        }
+//        if (callback == null) {
+//            throw new Exception(LogConstant.DAO_ARGUMENT_NOT_NULLC);
+//        }
         return jdbcTemplate.execute(sql, callback);
 
     }

@@ -1,6 +1,5 @@
 package com.cat.service.impl;
 
-import com.cat.annotations.AopTestAnno;
 import com.cat.constant.enums.EventTypeEnum;
 import com.cat.dao.user.LeaseCompanyDao;
 import com.cat.listener.AsyncEventEntity;
@@ -31,8 +30,6 @@ public class LeaseCompanyServiceImpl implements LeaseCompanyService {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
-    @AopTestAnno("hello")
-//    @AuthZ
     public LeaseCompanyDO getLeaseCompanyByCode(String code) {
         Map<String, String> param = Maps.newHashMap();
         param.put("leaseCompanyCode", code);
