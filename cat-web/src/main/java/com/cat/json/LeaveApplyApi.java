@@ -1,22 +1,21 @@
 package com.cat.json;
 
+import com.cat.activiti.service.ActivitiService;
 import com.cat.annotations.View;
 import com.cat.model.UserLeaveRecordDO;
-import com.cat.service.ActivitiService;
 import com.cat.service.LeaveRecordService;
 import com.cat.service.LeaveService;
 import com.cat.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 /**
  * @author wangxiaoqiang
@@ -62,6 +61,19 @@ public class LeaveApplyApi {
         leaveService.completeLeaveFlow(applyId, agree);
 
         return Result.success(agree==1);
+    }
+
+    @RequestMapping(value={"/goToStatus"}, method= {RequestMethod.POST, RequestMethod.GET})
+    @ApiOperation(value="处理请假 ", notes="返回审批结果")
+    public Result<Boolean> goToStatus(@ApiParam(name="userId", value="userId") @RequestParam(name = "userId", required = true) String userId,
+                                     @ApiParam(name="status", value="status") @RequestParam(name = "status", required = true) String status) {
+        UserLeaveRecordDO userLeaveRecordDO = recordService.getRecordByUserId(userId).stream().filter(UserLeaveRecordDO :: processing).findAny().orElse(null);
+        Assert.isTrue(userLeaveRecordDO== null, "还有未处理完的申请");
+
+        userLeaveRecordDO = new UserLeaveRecordDO();
+        userLeaveRecordDO.setUserId(userId);
+        leaveService.goToStatus(userLeaveRecordDO, status);
+        return Result.success(true);
     }
 
 

@@ -1,7 +1,7 @@
 package com.cat;
 
+import com.cat.activiti.service.ActivitiService;
 import com.cat.constant.enums.ProcessKeyEnum;
-import com.cat.service.ActivitiService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

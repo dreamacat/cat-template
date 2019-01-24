@@ -14,4 +14,6 @@ public interface LeaveService {
 
     void completeLeaveFlow(Long applyId, Integer agree);
 
+    void goToStatus(UserLeaveRecordDO leaveRecordDO, String status);
+
 }

@@ -1,0 +1,40 @@
+@startuml
+class Client
+
+class Context
+
+abstract class LiftState
+
+class OpenningState
+class ClosingState
+class StoppingState
+class RunningState
+
+Client --> LiftState
+Client --> Context
+
+
+Context o--> LiftState
+
+LiftState <|-- OpenningState
+LiftState <|-- ClosingState
+LiftState <|-- StoppingState
+LiftState <|-- RunningState
+
+
+
+class Context {
+
+}
+
+ abstract class LiftState {
+    protected Context context;
+    setContext(Context context)
+
+    public abstract void open()
+    public abstract void close()
+    public abstract void run()
+    public abstract void stop()
+}
+
+@enduml

@@ -1,19 +1,18 @@
 package com.cat.service.impl;
 
+import com.cat.activiti.service.ActivitiService;
 import com.cat.constant.enums.ProcessKeyEnum;
 import com.cat.constant.enums.ProcessStatusEnum;
 import com.cat.model.UserLeaveRecordDO;
-import com.cat.service.ActivitiService;
 import com.cat.service.LeaveRecordService;
 import com.cat.service.LeaveService;
+import java.util.Iterator;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author wangxiaoqiang
@@ -138,8 +137,18 @@ public class LeaveServiceImpl implements LeaveService {
         return null;
     }
 
+    @Override
+    @Transactional
+    public void goToStatus(UserLeaveRecordDO leaveRecordDO, String status) {
+        ProcessKeyEnum processKeyEnum = ProcessKeyEnum.LEAVE_PROCESS;
+        String processId = activitiService.startProcessByKey(processKeyEnum);
+        ProcessStatusEnum statusEnum = ProcessStatusEnum.valueOf(status);
+        activitiService.taskRollback(processId,statusEnum.name());
 
+        Task task = activitiService.findTaskByInstanceId(processId);
 
-
-
+        leaveRecordDO.setTaskId(task.getId());
+        leaveRecordDO.setStatusCode(statusEnum.getCode());
+//        leaveRecordDO.set
+    }
 }

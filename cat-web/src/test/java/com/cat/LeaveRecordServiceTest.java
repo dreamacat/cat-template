@@ -4,13 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.cat.constant.enums.ProcessStatusEnum;
 import com.cat.model.UserLeaveRecordDO;
 import com.cat.service.LeaveRecordService;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
 
 /**
  * @author wangxiaoqiang
@@ -38,7 +37,7 @@ public class LeaveRecordServiceTest {
         recordDO.setUserId(userId);
         recordDO.setTaskId("testTaskId");
         recordDO.setStatusCode(ProcessStatusEnum.GROUP_SIGN.getCode());
-        recordDO.setPrevStatus(ProcessStatusEnum.APPLY_LEAVE.getCode());
+//        recordDO.setNextStatus(ProcessStatusEnum.APPLY_LEAVE.getCode());
         recordService.insertRecord(recordDO);
     }
 

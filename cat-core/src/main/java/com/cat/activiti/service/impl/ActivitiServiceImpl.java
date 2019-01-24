@@ -1,20 +1,23 @@
-package com.cat.service.impl;
+package com.cat.activiti.service.impl;
 
+import com.cat.activiti.JumpCmd;
+import com.cat.activiti.service.ActivitiService;
 import com.cat.constant.enums.ProcessKeyEnum;
-import com.cat.service.ActivitiService;
 import com.google.common.collect.Maps;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.ManagementService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author wangxiaoqiang
@@ -30,6 +33,10 @@ public class ActivitiServiceImpl implements ActivitiService {
     private RuntimeService runtimeService;
     @Autowired
     private RepositoryService repositoryService;
+    @Autowired
+    private ManagementService managementService;
+
+    private HistoryService historyService;
 
     private final String checkVariables = "check";
 
@@ -129,47 +136,35 @@ public class ActivitiServiceImpl implements ActivitiService {
      *  回滚activiti 到执行的状态
      *
      * @param processInstanceId acitivi 实例ID
-     * @param  definitionKey   状态Key  orderStatusEnum.name()
+     * @param  targetFlowNodeId   状态Key  orderStatusEnum.name()
      */
     @Override
-    public void taskRollback(String processInstanceId,String definitionKey){
+    public void taskRollback(String processInstanceId, String targetFlowNodeId){
 
-        //进而获取流程实例
-//        ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-//
-//        //获得流程定义
-//        ProcessDefinitionEntity definition = (ProcessDefinitionEntity) repositoryService.getProcessDefinition(instance.getProcessDefinitionId());
-//        Asserts.notNull(definition, definitionKey +" not exists ActivitiTask ");
-//
-//        // 获取流程层节点定义
-//        ActivityImpl activitiImpl =  definition.findActivity(definitionKey);
-//        Asserts.notNull(activitiImpl, definitionKey +"  所对应的流程节点不存在 " );
-//        managementService.executeCommand(new JumpCmd(instance.getId(),activitiImpl.getId()));
+        //获取流程实例
+        ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+
+        Task curTask = this.findTaskByInstanceId(instance.getProcessInstanceId());
+
+        jump2TargetFlowNode(curTask.getId(), targetFlowNodeId);
+
+        Task taskask = this.findTaskByInstanceId(instance.getProcessInstanceId());
+        System.out.println(taskask.getTaskDefinitionKey());
+
+        throw new RuntimeException("test");
 
     }
 
-//    class JumpCmd implements Command<ExecutionEntity> {
-//
-//        private String processInstanceId;
-//        private String activityId;
-//        public static final String REASION_DELETE = "deleted";
-//
-//        public JumpCmd(String processInstanceId, String activityId) {
-//            this.processInstanceId = processInstanceId;
-//            this.activityId = activityId;
-//        }
-//
-//        @Override
-//        public ExecutionEntity execute(CommandContext commandContext) {
-//            ExecutionEntity executionEntity = commandContext.getExecutionEntityManager().findby(processInstanceId);
-//
-//            executionEntity.destroyScope(REASION_DELETE);
-//            ProcessDefinitionImpl processDefinition = executionEntity.getProcessDefinition();
-//            ActivityImpl activity = processDefinition.findActivity(activityId);
-//            executionEntity.executeActivity(activity);
-//
-//            return executionEntity;
-//        }
-//
-//    }
+
+
+    /**
+     * 跳转到指定流程节点
+     *
+     * @param curTaskId
+     * @param targetFlowNodeId
+     *            指定的流程节点ID 比如跳转<endEvent id="endevent1" name="End"></endEvent> ，则targetFlowNodeId为endevent1
+     */
+    public  void jump2TargetFlowNode(String curTaskId, String targetFlowNodeId) {
+        managementService.executeCommand(new JumpCmd(curTaskId, targetFlowNodeId));
+    }
 }
