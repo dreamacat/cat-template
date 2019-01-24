@@ -1,14 +1,10 @@
 package com.cat.component;
 
-import com.cat.annotations.AuthZ;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.lang.reflect.Method;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
  * @author wangxiaoqiang
@@ -27,15 +23,15 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("MyInterceptor preHandle");
         log.info("request请求地址path[{}] uri[{}]", request.getServletPath(),request.getRequestURI());
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
-        AuthZ authZ = method.getAnnotation(AuthZ.class);
-
-        if (hasLogin(request) && (authZ == null || authZ.role().equals("cat"))) {
-            return true;
-        }
-        response.setStatus(401);
-        outRequestForJson(request,response, authZ.errMsg());
+//        HandlerMethod handlerMethod = (HandlerMethod) handler;
+//        Method method = handlerMethod.getMethod();
+//        AuthZ authZ = method.getAnnotation(AuthZ.class);
+//
+//        if (hasLogin(request) && (authZ == null || authZ.role().equals("cat"))) {
+//            return true;
+//        }
+//        response.setStatus(401);
+//        outRequestForJson(request,response, authZ.errMsg());
 
         return false;
     }

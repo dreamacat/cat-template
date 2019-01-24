@@ -3,10 +3,9 @@ package com.cat.dao.user.impl;
 import com.cat.dao.base.impl.MybatisBaseDao;
 import com.cat.dao.user.LeaseCompanyDao;
 import com.cat.model.LeaseCompanyDO;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
-import java.util.Map;
 
 /**
  * @author wangxiaoqiang
@@ -51,5 +50,16 @@ public class LeaseCompanyDaoImpl extends MybatisBaseDao implements LeaseCompanyD
 			log.error("error", e);
 		}
 		return leaseCompanyDO;
+	}
+
+	@Override
+	public boolean insertLeaseCompany(LeaseCompanyDO companyDO) {
+		int count = 0;
+		try {
+			count = insertBySqlId("LeaseCompanyMapper.insertLeaseCompany", companyDO);
+		} catch (Exception e) {
+			log.error("error", e);
+		}
+		return count > 0;
 	}
 }

@@ -15,4 +15,10 @@
     <update id="updateByCode" parameterType="com.cat.model.LeaseCompanyDO">
         UPDATE fcl_lease_company_basic SET rate = #{rate} WHERE lease_company_code = #{leaseCompanyCode}
     </update>
+
+
+    <insert id="insertLeaseCompany" parameterType="com.cat.model.LeaseCompanyDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fcl_lease_company_basic (id, lease_company_code, lease_company, rate)
+        VALUES (#{id}, #{leaseCompanyCode}, #{leaseCompanyName}, #{rate});
+    </insert>
 </mapper>
