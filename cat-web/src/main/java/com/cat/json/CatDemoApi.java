@@ -9,14 +9,13 @@ import com.cat.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.annotation.Resource;
 
 /**
  * @author wangxiaoqiang
@@ -57,7 +56,7 @@ public class CatDemoApi {
     public Result<LeaseCompanyDO> getLeaseCompany(@ApiParam(name="code", value="code") @RequestParam(name = "code", required = true) String code) {
         LeaseCompanyDO companyDO = leaseCompanyServiceImpl.getLeaseCompanyByCode(code);
         if (companyDO != null) {
-            companyDO.setRate(1010);
+            companyDO.setRate(1011);
         }
         System.out.println(leaseCompanyServiceImpl.updateByCode(companyDO));
         return Result.success(companyDO);

@@ -1,0 +1,45 @@
+@startuml
+
+abstract PhoneFactory {
+    abstract <T extends Phone> productionPhone(Class<T> clz);
+}
+
+interface Phone {
+    void brandName();
+    void salePrice();
+}
+
+
+
+
+class Apple {
+    void brandName();
+    void salePrice();
+}
+class Honor {
+   void brandName();
+   void salePrice();
+}
+
+
+Phone <|-- Apple
+Phone <|-- Honor
+
+
+
+
+class AppleFactory {
+    void brandName();
+    void salePrice();
+}
+class HonorFactory {
+    void brandName();
+    void salePrice();
+}
+
+PhoneFactory <|-- AppleFactory
+PhoneFactory <|-- HonorFactory
+
+
+
+@enduml
