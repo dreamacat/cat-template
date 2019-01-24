@@ -14,7 +14,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 可添加多个
-        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/api");
     }
 
 

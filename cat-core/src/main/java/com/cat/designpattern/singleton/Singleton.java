@@ -1,4 +1,4 @@
-package com.cat.algorithm;
+package com.cat.designpattern.singleton;
 
 /**
  * @author wangxiaoqiang
@@ -27,3 +27,5 @@ public class Singleton {
         Singleton.getInstance();
     }
 }
+
+
