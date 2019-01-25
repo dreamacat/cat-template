@@ -1,89 +1,87 @@
 package com.cat.stateMachine;
 
-import com.cat.enums.Events;
-import com.cat.enums.States;
-import com.cat.stateMachine.action.CreateOrderAction;
+import com.cat.constant.enums.ProcessStatusEnum;
+import com.cat.enums.LeaveEvents;
+import com.cat.stateMachine.action.BossAllowAction;
+import com.cat.stateMachine.action.BossRejectAction;
+import com.cat.stateMachine.action.CreateLeaveAction;
+import com.cat.stateMachine.action.GroupAllowAction;
+import com.cat.stateMachine.action.GroupRejectAction;
+import com.cat.stateMachine.listener.LeaveStateListener;
 import java.util.EnumSet;
+import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.statemachine.config.EnableStateMachine;
+import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
+import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
-import org.springframework.statemachine.listener.StateMachineListener;
-import org.springframework.statemachine.listener.StateMachineListenerAdapter;
-import org.springframework.statemachine.transition.Transition;
+import org.springframework.statemachine.service.DefaultStateMachineService;
+import org.springframework.statemachine.service.StateMachineService;
 
 /**
  * @author wangxiaoqiang
  * @since 2019/01/24
  **/
 @Configuration
-@EnableStateMachine
-public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States, Events> {
+//@EnableStateMachine
+@EnableStateMachineFactory
+public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<ProcessStatusEnum, LeaveEvents> {
     @Autowired
-    CreateOrderAction createOrderAction;
+    CreateLeaveAction createLeaveAction;
+    @Autowired
+    GroupAllowAction groupAllowAction;
+    @Autowired
+    GroupRejectAction groupRejectAction;
+    @Autowired
+    BossAllowAction bossAllowAction;
+    @Autowired
+    BossRejectAction bossRejectAction;
+    @Resource
+    LeaveStateListener leaveStatusChangedListener;
+    @Resource
+    LeaveStateListener leaveTracedListener;
 
     @Override
-    public void configure(StateMachineStateConfigurer<States, Events> states) throws Exception {
+    public void configure(StateMachineStateConfigurer<ProcessStatusEnum, LeaveEvents> states) throws Exception {
         states.withStates()
-                .initial(States.INIT_ORDER)
-                .states(EnumSet.allOf(States.class));
+                .initial(ProcessStatusEnum.APPLY_LEAVE)
+                .states(EnumSet.allOf(ProcessStatusEnum.class));
     }
 
     @Override
-    public void configure(StateMachineTransitionConfigurer<States, Events> transitions) throws Exception {
-        //
-        transitions.withExternal().source(States.INIT_ORDER).target(States.UNPAID)
-                .event(Events.CREATE_ORDER).action(createOrderAction).and();
-
-        transitions.withExternal().source(States.UNPAID).target(States.WAITING_FOR_RECEIVE)
-                .event(Events.PAY).and();
-        //
-        transitions.withExternal().source(States.WAITING_FOR_RECEIVE).target(States.DONE)
-                .event(Events.RECEIVE);
+    public void configure(StateMachineTransitionConfigurer<ProcessStatusEnum, LeaveEvents> transitions) throws Exception {
+        //申请请假
+        transitions.withExternal().source(ProcessStatusEnum.APPLY_LEAVE).target(ProcessStatusEnum.GROUP_SIGN)
+                .event(LeaveEvents.APPLY_LEAVE).action(createLeaveAction).and();
+        //组长同意审批
+        transitions.withExternal().source(ProcessStatusEnum.GROUP_SIGN).target(ProcessStatusEnum.BOSS_SIGN)
+                .event(LeaveEvents.GROUP_ALLOW).action(groupAllowAction).and();
+        //组长否决审批
+        transitions.withExternal().source(ProcessStatusEnum.GROUP_SIGN).target(ProcessStatusEnum.APPLY_CLOSE)
+                .event(LeaveEvents.GROUP_REJECT).action(groupRejectAction);
+        //boss同意审批
+        transitions.withExternal().source(ProcessStatusEnum.BOSS_SIGN).target(ProcessStatusEnum.APPLY_CLOSE)
+                .event(LeaveEvents.BOSS_ALLOW).action(bossAllowAction);
+        //boss否决审批
+        transitions.withExternal().source(ProcessStatusEnum.BOSS_SIGN).target(ProcessStatusEnum.APPLY_CLOSE)
+                .event(LeaveEvents.BOSS_REJECT).action(bossRejectAction);
     }
 
     @Override
-    public void configure(StateMachineConfigurationConfigurer<States, Events> config) throws Exception {
+    public void configure(StateMachineConfigurationConfigurer<ProcessStatusEnum, LeaveEvents> config) throws Exception {
         config
                 .withConfiguration()
-                .listener(listener());
-    }
-
-    @Bean
-    public StateMachineListener<States, Events> listener() {
-        return new StateMachineListenerAdapter<States, Events>() {
-
-            @Override
-            public void transition(Transition<States, Events> transition) {
-                if(transition.getTarget().getId() == States.INIT_ORDER) {
-                    System.out.println("");
-                    return;
-                }
-                if(transition.getTarget().getId() == States.UNPAID) {
-                    System.out.println("订单创建，待支付");
-                    return;
-                }
-
-                if(transition.getSource().getId() == States.UNPAID
-                        && transition.getTarget().getId() == States.WAITING_FOR_RECEIVE) {
-                    System.out.println("用户完成支付，待收货");
-                    return;
-                }
-
-                if(transition.getSource().getId() == States.WAITING_FOR_RECEIVE
-                        && transition.getTarget().getId() == States.DONE) {
-                    System.out.println("用户已收货，订单完成");
-                    return;
-                }
-            }
-
-        };
+                .listener(leaveStatusChangedListener).listener(leaveTracedListener);
     }
 
 
+    @Bean(name = "leaveStateMachineService")
+    public StateMachineService getLeaveStateMachineService(StateMachineFactory leaveStateMachineFactory) {
+        return new DefaultStateMachineService(leaveStateMachineFactory);
+    }
 
 }

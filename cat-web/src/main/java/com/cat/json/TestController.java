@@ -1,14 +1,15 @@
 package com.cat.json;
 
 import com.cat.annotations.View;
-import com.cat.enums.Events;
-import com.cat.enums.States;
+import com.cat.service.LeaveWorkFlowService;
+import com.cat.stateMachine.event.BossSignEvent;
+import com.cat.stateMachine.event.GroupSignEvent;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.statemachine.StateMachine;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,16 +22,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 @View
 @Api(value = "TestApi", description = "testApi")
 @Slf4j
-public class TestController {
+public class TestController implements InitializingBean {
 
     @Autowired
-    private StateMachine<States, Events> stateMachine;
+    private LeaveWorkFlowService workFlowService;
+
+    @RequestMapping(value={"/startMachine"}, method= {RequestMethod.POST, RequestMethod.GET})
+    @ApiOperation(value="启动状态机 ", notes="")
+    public void startMachine(@ApiParam(name="userId", value="userId") @RequestParam(name = "userId", required = true) String userId) {
+
+//        String machineId = userId;
+//        StateMachine<ProcessStatusEnum, LeaveEvents> stateMachine = leaveStateMachineService.acquireStateMachine(machineId, true);
+//        stateMachine.start();
+//        stateMachine.sendEvent(LeaveEvents.APPLY_LEAVE);
+    }
+
 
     @RequestMapping(value={"/testMachine"}, method= {RequestMethod.POST, RequestMethod.GET})
-    @ApiOperation(value="启动状态机 ", notes="")
-    public void hello(@ApiParam(name="name", value="姓名") @RequestParam(name = "name") String name) {
-        stateMachine.start();
-        stateMachine.sendEvent(Events.PAY);
-        stateMachine.sendEvent(Events.RECEIVE);
+    @ApiOperation(value="测试状态机 ", notes="")
+    public void hello(@ApiParam(name="applyId", value="applyId") @RequestParam(name = "applyId", required = true) Long applyId) {
+
+        workFlowService.doEvent(new GroupSignEvent(1L, true));
+        workFlowService.doEvent(new BossSignEvent(2L, true));
+
+
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
     }
 }

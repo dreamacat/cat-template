@@ -1,8 +1,7 @@
 package com.cat.model;
 
-import lombok.Data;
-
 import java.util.Date;
+import lombok.Data;
 
 /**
  * @author wangxiaoqiang
@@ -32,6 +31,5 @@ public class UserLeaveRecordDO {
     public boolean reject() {
         return result != null && result.equals(0);
     }
-
 
 }

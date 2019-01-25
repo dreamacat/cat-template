@@ -1,9 +1,8 @@
 package com.cat.constant.enums;
 
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Arrays;
 
 /**
  * @author wangxiaoqiang
@@ -13,8 +12,8 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum ProcessStatusEnum {
     APPLY_LEAVE(0, "申请请假",""),
-    GROUP_SIGN(100, "组长审批","提交申请"),
-    BOSS_SIGN(200, "boss审批", "组长审批通过"),
+    GROUP_SIGN(100, "待组长审批","提交申请"),
+    BOSS_SIGN(200, "待boss审批", "组长审批通过"),
     APPLY_CLOSE(500, "审批结束", "审批结束");
 
 
