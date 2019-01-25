@@ -14,6 +14,7 @@ public class LeaveEvent implements Serializable {
     private String userId;
     private LeaveEvents eventType;
 
+
     public LeaveEvent(Long leaveId, LeaveEvents eventType) {
         this.leaveId = leaveId;
         this.eventType = eventType;

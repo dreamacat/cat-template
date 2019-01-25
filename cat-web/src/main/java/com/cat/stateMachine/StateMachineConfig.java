@@ -2,6 +2,7 @@ package com.cat.stateMachine;
 
 import com.cat.constant.enums.ProcessStatusEnum;
 import com.cat.enums.LeaveEvents;
+import com.cat.stateMachine.action.ApplyFinishAction;
 import com.cat.stateMachine.action.BossAllowAction;
 import com.cat.stateMachine.action.BossRejectAction;
 import com.cat.stateMachine.action.CreateLeaveAction;
@@ -40,6 +41,9 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<Proces
     BossAllowAction bossAllowAction;
     @Autowired
     BossRejectAction bossRejectAction;
+    @Autowired
+    ApplyFinishAction applyFinishAction;
+
     @Resource
     LeaveStateListener leaveStatusChangedListener;
     @Resource
@@ -62,13 +66,13 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<Proces
                 .event(LeaveEvents.GROUP_ALLOW).action(groupAllowAction).and();
         //组长否决审批
         transitions.withExternal().source(ProcessStatusEnum.GROUP_SIGN).target(ProcessStatusEnum.APPLY_CLOSE)
-                .event(LeaveEvents.GROUP_REJECT).action(groupRejectAction);
+                .event(LeaveEvents.GROUP_REJECT).action(groupRejectAction).action(applyFinishAction);
         //boss同意审批
         transitions.withExternal().source(ProcessStatusEnum.BOSS_SIGN).target(ProcessStatusEnum.APPLY_CLOSE)
-                .event(LeaveEvents.BOSS_ALLOW).action(bossAllowAction);
+                .event(LeaveEvents.BOSS_ALLOW).action(bossAllowAction).action(applyFinishAction);
         //boss否决审批
         transitions.withExternal().source(ProcessStatusEnum.BOSS_SIGN).target(ProcessStatusEnum.APPLY_CLOSE)
-                .event(LeaveEvents.BOSS_REJECT).action(bossRejectAction);
+                .event(LeaveEvents.BOSS_REJECT).action(bossRejectAction).action(applyFinishAction);
     }
 
     @Override
