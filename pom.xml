@@ -24,6 +24,7 @@
 		<java.version>1.8</java.version>
 		<springboot.version>2.0.4.RELEASE</springboot.version>
 		<swagger.version>2.6.1</swagger.version>
+		<spring-statemachine.version>2.1.0.RC1</spring-statemachine.version>
 	</properties>
 
 

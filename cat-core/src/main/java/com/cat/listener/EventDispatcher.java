@@ -1,17 +1,16 @@
 package com.cat.listener;
 
+import com.cat.event.service.LeaseCompanyService;
 import com.cat.model.LeaseCompanyDO;
-import com.cat.service.LeaseCompanyService;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.util.CollectionUtils;
-
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author wangxiaoqiang

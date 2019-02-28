@@ -2,9 +2,9 @@ package com.cat.json;
 
 import com.alibaba.fastjson.JSON;
 import com.cat.annotations.View;
+import com.cat.event.service.CatDemoService;
+import com.cat.event.service.LeaseCompanyService;
 import com.cat.model.LeaseCompanyDO;
-import com.cat.service.CatDemoService;
-import com.cat.service.LeaseCompanyService;
 import com.cat.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

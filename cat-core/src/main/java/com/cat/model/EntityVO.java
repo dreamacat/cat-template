@@ -15,4 +15,5 @@ public class EntityVO {
         this.key = key;
         this.value = val;
     }
+
 }
