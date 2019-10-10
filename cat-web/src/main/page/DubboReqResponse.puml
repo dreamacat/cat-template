@@ -1,0 +1,11 @@
+@startuml
+dubboInvoker -> headerExchangeClient: request
+headerExchangeClient -> headerExchangeChannel: request(创建DefaultFuture，生成request)
+headerExchangeChannel ->nettyChannel: send
+
+nettyChannel-> ExchangeCodec: encode
+ExchangeCodec-> NettyHandler: writeRequested
+
+
+
+@enduml
